@@ -23,12 +23,22 @@ Download the datasets (this might take a few minutes):
 ```
 python scripts/datasets.py
 ```
-The data will be stored in `./datasets/download`; the path can be customized with the environment variable `CBLEARN_DATA`.
+The data will be stored in `./datasets`; the path can be customized with the environment variable `CBLEARN_DATA`.
+
+## Run benchmark
 
 
-Running matlab:
+### Singularity container (recommended)
 singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a
 
+
+### Manual
+python scripts/embedding.py STE car
+
+
+install.packages(c('docopt', 'rjson', 'MLDS', 'loe'),
+                           dependencies=TRUE, 
+                           repos='http://cran.rstudio.com/')
 docker run -it --rm -p 8888:8888 -e MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de --shm-size=512M mathworks/matlab:r2022a 
 
 ## Plotting

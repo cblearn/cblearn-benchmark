@@ -1,27 +1,28 @@
 library(docopt)
 library(rjson)
-"Usage: embedding.R [--seed SEED] ALGO DATASET RESULT
+"Usage: R -f embedding.R [--seed SEED] ALGO DATASET
 
 -h --help   show this
 ALGO    name of the embedding algorithm
 DATASET meta file of the triplet dataset
-RESULT result file
 --seed=SEED random number seed [default: NULL]." -> doc
 args <- docopt(doc)
 print(args)
 
 algo <- args$ALGO
-dataset_file <- args$DATASET
-result_file <- args$RESULT
+dataset_name <- args$DATASET
+dataset_file <- file.path('./datasets/', paste(dataset_name, '.json'))
+result_file <- file.path('./results/', paste('R_', algo, '_', dataset_name, '_', Sys.time() ,'.json'))
 margin <- 1
 seed <- args$SEED 
 
 set.seed(seed)
 
 dataset <- fromJSON(file=dataset_file)
-train_triplets <- read.csv(dataset$train_triplets)
+train_triplets <- dataset$train_triplets
 objects <- dataset$num_objects
-dims <- dataset$num_dimensions
+dims = 2
+# dims <- dataset$num_dimensions
 
 # R is 1-indexed
 train_triplets <- train_triplets + 1
@@ -51,7 +52,7 @@ if (algo == 'SOE') {
     stop(paste("Unsupported algo", algo))
 }
 
-result <- list(dataset=dataset_file, 
+result <- list(dataset=dataset_name, 
                library=library, 
                algorithm=algo, 
                loss=loss, 

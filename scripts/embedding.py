@@ -1,23 +1,31 @@
+import os
+
+from pathlib import Path
 import argparse
-import pandas
 import json
 import time
+import numpy as np
+
+
+DATA_HOME = Path(os.environ.get('CBLEARN_DATA', Path(__file__).parent / '../datasets'))
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('algo', type=str, help='The embedding algorithm.')
 parser.add_argument('dataset', type=str, help='The dataset file.')
-parser.add_argument('result', type=str, help='The result file.')
+#parser.add_argument('result', type=str, help='The result file.')
 args = parser.parse_args()
-
 algo = args.algo
-dataset_file = args.dataset
-result_file = args.result
+dataset =  args.dataset
+dims = 2
 
+dataset_file = (DATA_HOME / dataset).with_suffix('.json')
+result_file = Path(__file__).parent / f'../results/python_{algo}_{dataset}_{int(time.time())}.json'
 
-with open(dataset_file, 'r') as f:
-    dataset = json.load(f)
-train_triplets = pandas.read_csv(dataset['train_triplets'])
+with dataset_file.open('r') as f:
+    data = json.load(f)
+
+train_triplets = np.array(data['train_triplets'])
 
 ### CBLEARN
 library = 'cblearn'
@@ -46,21 +54,23 @@ match algo_parts[0]:
         estimator = embedding.STE(dims, backend=backend, device=device)
     case 'tSTE':
         estimator = embedding.TSTE(dims, backend=backend, device=device)
-    else:
+    case _:
         raise ValueError(f"Unexpected algorithm {algo}.")
 
 start_time = time.process_time()
 estimator.fit(train_triplets)
 end_time = time.process_time()
+print(end_time - start_time)
 embedding = estimator.embedding_
 loss = estimator.stress_
 ### END CBLEARN
 
-result = {'dataset': dataset_file,
+result = {'dataset': dataset,
           'library': library,
           'algorithm': algo,
           'loss': loss,
           'cpu_time': end_time - start_time,
           'embedding': embedding.tolist()}
 print(f"Save results to {result_file} ...")
-json.dump(result, result_file, indent=2)
+with result_file.open('w') as f:
+    json.dump(result, f, indent=4)
