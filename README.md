@@ -11,6 +11,16 @@ singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de dock
 
 docker run -it --rm -p 8888:8888 -e MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de --shm-size=512M mathworks/matlab:r2022a 
 
+## Notebooks
+```
+conda create -n cblearn python==3.10
+conda activate cblearn
+
+conda install cblearn, h5py (for datasets)
+conda install matplotlib, tqdm
+conda install -c conda-forge adjusttext 
+```
+
 ## Libraries and Algorithms: 
 
 **R-language** `R embedding.R <algo> <dataset> <result>`
