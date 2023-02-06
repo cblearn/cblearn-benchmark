@@ -1,4 +1,7 @@
-datasets/
+datasets/*
 .ipynb_checkpoints
 __pycache__
+
+logs/*.out
+logs/*.err
 

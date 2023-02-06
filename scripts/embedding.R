@@ -1,26 +1,29 @@
-library(docopt)
-library(rjson)
-"Usage: R -f embedding.R [--seed SEED] ALGO DATASET
+'Usage:
+  embedding.R ALGO DATASET [--seed=SEED]
 
--h --help   show this
-ALGO    name of the embedding algorithm
-DATASET meta file of the triplet dataset
---seed=SEED random number seed [default: NULL]." -> doc
-args <- docopt(doc)
-print(args)
+Options:
+  -h --help     Show this screen.
+  --seed=SEED   Random number seed [default: NULL].
+  --version     Show version.
+' -> doc
+
+library(docopt)
+library(jsonlite)
+
+args <- docopt(doc, version = 'Ordinal Embedding in R')
 
 algo <- args$ALGO
 dataset_name <- args$DATASET
-dataset_file <- file.path('./datasets/', paste(dataset_name, '.json'))
-result_file <- file.path('./results/', paste('R_', algo, '_', dataset_name, '_', Sys.time() ,'.json'))
+dataset_file <- file.path('./datasets', paste(dataset_name, '.json', sep=""))
+result_file <- file.path('./results', paste('R_', algo, '_', dataset_name, '_', Sys.time() ,'.json', sep=""))
 margin <- 1
 seed <- args$SEED 
 
 set.seed(seed)
 
-dataset <- fromJSON(file=dataset_file)
+dataset <- fromJSON(dataset_file)
 train_triplets <- dataset$train_triplets
-objects <- dataset$num_objects
+objects <- dataset$n_objects
 dims = 2
 # dims <- dataset$num_dimensions
 
@@ -30,15 +33,16 @@ train_triplets <- train_triplets + 1
 print("Start embedding ...")
 if (algo == 'SOE') {
     library <- 'loe'
-    require(library)
+    require('loe')
     timing <- system.time(
-        result <- loe.SOE(CM=train_triplets, N=objects, p=dims, report=0, rnd=nrow(triplets))
+        result <- SOE(CM=train_triplets, N=objects, p=dims, report=1000, 
+                      rnd=nrow(triplets))  # rnd: use all triplets
     )
     loss <- result$str
     embedding <- result$X
 } else if (algo == 'MLDS') {
     library <- 'MLDS'
-    require(library)
+    require('MLDS')
     df <- data.frame(resp=train_triplets$response,
                      s1=train_triplets$lowest,
                      s2=train_triplets$target, 

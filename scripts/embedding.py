@@ -45,7 +45,11 @@ match algo_parts[0]:
     case 'CKL':
         estimator = embedding.CKL(dims, backend=backend, device=device, kernel=is_kernel)
     case 'FORTE':
-        estimator = embedding.FORTE(dims, backend=backend, device=device, kernel=is_kernel)
+        if backend != 'torch':
+            raise ValueError(f"FORTE does not support multiple backends at the moment.")
+        if is_kernel:
+            raise ValueError(f"FORTE does not support kernel at the moment.")
+        estimator = embedding.FORTE(dims)
     case 'GNMDS':
         estimator = embedding.GNMDS(dims, backend=backend, device=device, kernel=is_kernel)
     case 'SOE':
@@ -68,8 +72,8 @@ loss = estimator.stress_
 result = {'dataset': dataset,
           'library': library,
           'algorithm': algo,
-          'loss': loss,
-          'cpu_time': end_time - start_time,
+          'loss': float(loss),
+          'cpu_time': float(end_time - start_time),
           'embedding': embedding.tolist()}
 print(f"Save results to {result_file} ...")
 with result_file.open('w') as f:

@@ -8,8 +8,9 @@ At the moment, only ordinal embedding algorithms are evaluated.
 
 ## Preparation
 
-Setup a conda environment:
-```
+### Setup a conda environment
+
+```sh
 conda create -n cblearn python==3.10
 conda activate cblearn
 
@@ -19,27 +20,84 @@ pip install git+https://github.com/dekuenstle/cblearn.git#egg=cblearn[torch]
 pip install jupyterlab
 ```
 
-Download the datasets (this might take a few minutes):
-```
+### Download the datasets 
+
+The data will be stored in `./datasets`; the path can be customized with the environment variable `CBLEARN_DATA`.
+(this might take a few minutes)
+
+```sh
+conda activate cblearn
 python scripts/datasets.py
 ```
-The data will be stored in `./datasets`; the path can be customized with the environment variable `CBLEARN_DATA`.
 
 ## Run benchmark
 
 
-### Singularity container (recommended)
-singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a
+### On a compute cluster (recommended)
 
+#### Python (via conda)
+
+1. `conda activate cblearn`
+2. `cat runs/py.sh | xargs -L1 sbatch slurm/batchjob.sh`
+
+#### Matlab (via singularity)
+
+1. sh slurm/mat-batchjob.sh ...
+```
+```
+
+
+#### R
+ 
+1. Start R and install dependencies. If you are asked, if you want to use a personal library, respond "yes". 
+   
+    ```sh
+    R
+    > install.packages(c('docopt', 'jsonlite', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.r-project.org/')
+    ... yes
+    ... yes
+    > q() 
+    ```
+3. `sh slurm/batchjob.sh Rscript scripts/embedding.R`
+
+echo $SCRATCH
+    /scratch_local/<foo>
+mkdir $SCRATCH/r-lib
+R
+> install.packages(c('docopt', 'jsonlite', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.r-project.org/', lib='/scratch_local/<foo>/r-lib')
+> q()
+cp -a $SCRATCH/r-lib/* ~/R/x86_64-redhat-linux-gnu-library/3.6/
 
 ### Manual
-python scripts/embedding.py STE car
 
+#### Python
+1. Install python environment as described above.
+2. `conda activate cblearn`
+2. Run a single model, e.g. `python scripts/embedding.py SOE car`, or all models `sh runs/py.sh`
 
-install.packages(c('docopt', 'rjson', 'MLDS', 'loe'),
-                           dependencies=TRUE, 
-                           repos='http://cran.rstudio.com/')
+#### R 
+
+1. Install R (tested with 4.2)
+2. Install dependencies in R. 
+    ```R
+    install.packages(c('docopt', 'rjson', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.rstudio.com/')
+    ```
+3. Run a single model, e.g. `Rscript scripts/embedding.R SOE car`, or all models `sh runs/r.sh`
+
+#### R in a container
+
+```
+
+```
+
+#### Matlab in a container
+```
+# singularity:
+singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a
+
+# or docker:
 docker run -it --rm -p 8888:8888 -e MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de --shm-size=512M mathworks/matlab:r2022a 
+```
 
 ## Plotting
 
@@ -66,7 +124,6 @@ Start jupyter `jupyter lab .`, and then run the following notebooks:
 
 * [cblearn](https://github.com/dekuenstle/cblearn): MLDS, CKL-X, GNMDS-X, SOE, STE-X, tSTE CKL-GPU[-K], FORTE-GPU[-K], GNMDS-GPU[-K], SOE-GPU, STE-GPU, tSTE-GPU
 
-how about ??? https://github.com/gcr/cython_tste
 ## Dependencies
 
 ### R Dependencies
@@ -78,3 +135,9 @@ how about ??? https://github.com/gcr/cython_tste
   
 If you don't run the scripts with containers, you can manually install 
 these dependencies to your local R instance with `install.packages(...)`.
+
+
+## Errors
+
+python scripts/embedding.py FORTE-GPU imagenet-v2
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.63 GiB (GPU 0; 10.76 GiB total capacity; 114.34 MiB already allocated; 10.04 GiB free; 116.00 MiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
