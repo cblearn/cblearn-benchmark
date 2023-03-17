@@ -1,6 +1,7 @@
 # Results
 
-Here we show results from 2023-03-17. 
+Here we show the lastest result plots stored in this repository. 
+
 
 # Dataset overview
 
