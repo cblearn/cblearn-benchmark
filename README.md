@@ -6,6 +6,8 @@ with each other and with implementations in different libraries.
 At the moment, only ordinal embedding algorithms are evaluated. 
 
 
+Here you find some [results](./results.md).
+
 ## Preparation
 
 ### Setup a conda environment
