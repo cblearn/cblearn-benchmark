@@ -5,12 +5,15 @@ Here we show the lastest result plots stored in this repository.
 
 # Dataset overview
 
+
 ![](./plots/datasets.png) ![](./plots/error-per-dataset_cblearn.png  ) 
 
+Datapoints in the boxplot correspond to runs of different cpu embedding algorithms, implemented in *cblearn*. 
 
 # Algorithm comparison by subgroups
 
 The shown errors and runtimes are relative to the average performance of the shown subgroup.
+Datapoints are the previously shown datasets. 
 
 | Error      | Time        |
 |------------|-------------|
