@@ -14,6 +14,5 @@
 
 # print info about current job
 scontrol show job $SLURM_JOB_ID
-
 #commands
-singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a $*
+singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a sh -c "$*"

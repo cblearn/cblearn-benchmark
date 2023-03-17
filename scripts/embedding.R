@@ -29,14 +29,15 @@ dims = 2
 
 # R is 1-indexed
 train_triplets <- train_triplets + 1
+train_quadruplets <- train_triplets[, c(1, 2, 1, 3)]
 
 print("Start embedding ...")
 if (algo == 'SOE') {
     library <- 'loe'
     require('loe')
     timing <- system.time(
-        result <- SOE(CM=train_triplets, N=objects, p=dims, report=1000, 
-                      rnd=nrow(triplets))  # rnd: use all triplets
+        result <- SOE(CM=train_quadruplets, N=objects, p=dims, report=1000, 
+                      rnd=nrow(train_quadruplets))  # rnd: use all triplets
     )
     loss <- result$str
     embedding <- result$X
@@ -55,14 +56,12 @@ if (algo == 'SOE') {
 } else {
     stop(paste("Unsupported algo", algo))
 }
-
-result <- list(dataset=dataset_name, 
+elapsed <- timing[3]
+result <- data.frame(dataset=dataset_name, 
                library=library, 
                algorithm=algo, 
                loss=loss, 
-               cpu_time=timing$elapsed,
-               embedding=embedding)
-print(result)
-
+               cpu_time=elapsed,
+               embedding=I(list(embedding)))  # the I() protects the list, such that the df contains just 1 entry
 print(paste("Save results to", result_file, "..."))
-save(toJSON(result, indent=2), file=result_file)
+cat(toJSON(result, pretty=TRUE), file=result_file)

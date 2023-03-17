@@ -42,11 +42,16 @@ python scripts/datasets.py
 
 #### Matlab (via singularity)
 
-1. sh slurm/mat-batchjob.sh ...
-```
-```
+1. Download [van der Maaten's STE scripts](https://lvdmaaten.github.io/ste/Stochastic_Triplet_Embedding.html) and extract to `lib/vanderMaaten_STE`
+2. Adjust matlab license file/server in `slurm/mat-batchjob.sh`
+3. `cat runs/mat.sh | tr '\n' '\0' | xargs -0n1 sbatch slurm/mat-batchjob.sh` or 
+    `singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a matlab -sd scripts/ -batch "embedding('STE', 'car');"` or (if matlab is available on your system) `sh runs/mat.sh`
+
+sh /mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/mat-batchjob.sh "matlab -sd scripts/ -batch 'disp(\"GNMDS\", \"car\");'"
+sbatch slurm/mat-batchjob.sh matlab -sd scripts/ -batch "'embedding(\"STE\", \"material\");'"
 
 
+singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a matlab -sd scripts/ -batch "embedding('STE', 'car');"
 #### R
  
 1. Start R and install dependencies. If you are asked, if you want to use a personal library, respond "yes". 
@@ -58,8 +63,10 @@ python scripts/datasets.py
     ... yes
     > q() 
     ```
-3. `sh slurm/batchjob.sh Rscript scripts/embedding.R`
+3. `cat runs/r.sh | xargs -L1 sbatch slurm/batchjob.sh` or `sh runs/r.sh` or `Rscript scripts/embedding.R SOE car`
 
+Workaround on our HPC:
+```
 echo $SCRATCH
     /scratch_local/<foo>
 mkdir $SCRATCH/r-lib
@@ -67,6 +74,7 @@ R
 > install.packages(c('docopt', 'jsonlite', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.r-project.org/', lib='/scratch_local/<foo>/r-lib')
 > q()
 cp -a $SCRATCH/r-lib/* ~/R/x86_64-redhat-linux-gnu-library/3.6/
+```
 
 ### Manual
 
@@ -84,13 +92,7 @@ cp -a $SCRATCH/r-lib/* ~/R/x86_64-redhat-linux-gnu-library/3.6/
     ```
 3. Run a single model, e.g. `Rscript scripts/embedding.R SOE car`, or all models `sh runs/r.sh`
 
-#### R in a container
-
-```
-
-```
-
-#### Matlab in a container
+#### Matlab (in a container)
 ```
 # singularity:
 singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a
@@ -141,3 +143,7 @@ these dependencies to your local R instance with `install.packages(...)`.
 
 python scripts/embedding.py FORTE-GPU imagenet-v2
 torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.63 GiB (GPU 0; 10.76 GiB total capacity; 114.34 MiB already allocated; 10.04 GiB free; 116.00 MiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+
+
+matlab
+tste things and imagenet-v2: timeout error

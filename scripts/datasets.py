@@ -50,7 +50,7 @@ def fetch_dataset(dataset, download_if_missing=False):
             raise ValueError(f'Unknown dataset `{dataset}`')
     return {
         'train_triplets': triplets.astype(int).tolist(),
-        'n_objects': int(np.amax(triplets))
+        'n_objects': int(np.amax(triplets)) + 1
     }
             
 
