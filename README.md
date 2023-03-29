@@ -141,11 +141,13 @@ If you don't run the scripts with containers, you can manually install
 these dependencies to your local R instance with `install.packages(...)`.
 
 
-## Errors
+## Missing data
 
-python scripts/embedding.py FORTE-GPU imagenet-v2
-torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.63 GiB (GPU 0; 10.76 GiB total capacity; 114.34 MiB already allocated; 10.04 GiB free; 116.00 MiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+We run each algorithm and dataset on a separate cluster entity with 96GB RAM and maximum 1 day runtime. If this is not enough, the run fails and no resultfile is stored. For example, our *FORTE-GPU* algorithm requires too much memory and thus fails on the large *imagenet-v2* dataset. 
+Similarly, the *tSTE* algorithm of vanderMaaten  timed out on the *things* and *imagenet-v2* datasets.
 
 
-matlab
-tste things and imagenet-v2: timeout error
+# License 
+
+The scripts in this library are free to use under the MIT License conditions. 
+The plots are shared under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) and require attribution.
