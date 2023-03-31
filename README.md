@@ -1,9 +1,9 @@
 # cblearn-benchmark
 
-This repository contains a small empirical comparison of algorithm implementations in [cblearn](https://github.com/dekuenstle/cblearn) 
-with each other and with implementations in different libraries. 
+This repository contains a small empirical comparison of algorithm implementations in [cblearn](https://github.com/dekuenstle/cblearn)
+with each other and with implementations in different libraries.
 
-At the moment, only ordinal embedding algorithms are evaluated. 
+At the moment, only ordinal embedding algorithms are evaluated.
 
 
 Here you find some [results](./results.md).
@@ -22,7 +22,7 @@ pip install git+https://github.com/dekuenstle/cblearn.git#egg=cblearn[torch]
 pip install jupyterlab
 ```
 
-### Download the datasets 
+### Download the datasets
 
 The data will be stored in `./datasets`; the path can be customized with the environment variable `CBLEARN_DATA`.
 (this might take a few minutes)
@@ -46,7 +46,7 @@ python scripts/datasets.py
 
 1. Download [van der Maaten's STE scripts](https://lvdmaaten.github.io/ste/Stochastic_Triplet_Embedding.html) and extract to `lib/vanderMaaten_STE`
 2. Adjust matlab license file/server in `slurm/mat-batchjob.sh`
-3. `cat runs/mat.sh | tr '\n' '\0' | xargs -0n1 sbatch slurm/mat-batchjob.sh` or 
+3. `cat runs/mat.sh | tr '\n' '\0' | xargs -0n1 sbatch slurm/mat-batchjob.sh` or
     `singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a matlab -sd scripts/ -batch "embedding('STE', 'car');"` or (if matlab is available on your system) `sh runs/mat.sh`
 
 sh /mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/mat-batchjob.sh "matlab -sd scripts/ -batch 'disp(\"GNMDS\", \"car\");'"
@@ -55,15 +55,15 @@ sbatch slurm/mat-batchjob.sh matlab -sd scripts/ -batch "'embedding(\"STE\", \"m
 
 singularity run --bind ${PWD}:/home/docker --pwd /home/docker --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a matlab -sd scripts/ -batch "embedding('STE', 'car');"
 #### R
- 
-1. Start R and install dependencies. If you are asked, if you want to use a personal library, respond "yes". 
-   
+
+1. Start R and install dependencies. If you are asked, if you want to use a personal library, respond "yes".
+
     ```sh
     R
     > install.packages(c('docopt', 'jsonlite', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.r-project.org/')
     ... yes
     ... yes
-    > q() 
+    > q()
     ```
 3. `cat runs/r.sh | xargs -L1 sbatch slurm/batchjob.sh` or `sh runs/r.sh` or `Rscript scripts/embedding.R SOE car`
 
@@ -85,10 +85,10 @@ cp -a $SCRATCH/r-lib/* ~/R/x86_64-redhat-linux-gnu-library/3.6/
 2. `conda activate cblearn`
 2. Run a single model, e.g. `python scripts/embedding.py SOE car`, or all models `sh runs/py.sh`
 
-#### R 
+#### R
 
 1. Install R (tested with 4.2)
-2. Install dependencies in R. 
+2. Install dependencies in R.
     ```R
     install.packages(c('docopt', 'rjson', 'MLDS', 'loe'), dependencies=TRUE, repos='http://cran.rstudio.com/')
     ```
@@ -100,7 +100,7 @@ cp -a $SCRATCH/r-lib/* ~/R/x86_64-redhat-linux-gnu-library/3.6/
 singularity run --env MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de docker://mathworks/matlab:r2022a
 
 # or docker:
-docker run -it --rm -p 8888:8888 -e MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de --shm-size=512M mathworks/matlab:r2022a 
+docker run -it --rm -p 8888:8888 -e MLM_LICENSE_FILE=27000@matlab-campus.uni-tuebingen.de --shm-size=512M mathworks/matlab:r2022a
 ```
 
 ## Plotting
@@ -112,7 +112,7 @@ Start jupyter `jupyter lab .`, and then run the following notebooks:
 * `scripts/plot_datasets.ipynb` ![Datasets plot](plots/datasets.png)
 
 
-## Libraries and Algorithms: 
+## Libraries and Algorithms:
 
 **R-language** `R embedding.R <algo> <dataset> <result>`
 
@@ -136,18 +136,19 @@ Start jupyter `jupyter lab .`, and then run the following notebooks:
 * [rjson](https://cran.r-project.org/web/packages/rjson/index.html): JSON loading
 * [MLDS](https://cran.r-project.org/web/packages/MLDS/index.html): MLDS Algorithm
 * [loe](https://cran.r-project.org/web/packages/loe/index.html): SOE Algorithm
-  
-If you don't run the scripts with containers, you can manually install 
+
+If you don't run the scripts with containers, you can manually install
 these dependencies to your local R instance with `install.packages(...)`.
 
 
 ## Missing data
 
-We run each algorithm and dataset on a separate cluster entity with 96GB RAM and maximum 1 day runtime. If this is not enough, the run fails and no resultfile is stored. For example, our *FORTE-GPU* algorithm requires too much memory and thus fails on the large *imagenet-v2* dataset. 
+We run each algorithm and dataset on a separate cluster entity with 96GB RAM and maximum 1 day runtime. If this is not enough, the run fails and no resultfile is stored. For example, our *FORTE-GPU* algorithm requires too much memory and thus fails on the large *imagenet-v2* dataset.
 Similarly, the *tSTE* algorithm of vanderMaaten  timed out on the *things* and *imagenet-v2* datasets.
+The *R* implementation of *SOE* crashed for *imagenet-v2* because "long vectors" are not supported by some internal function.
+The *CKL-GPU* run on *musician* resulted in NaN results (probably a bug).
 
+# License
 
-# License 
-
-The scripts in this library are free to use under the MIT License conditions. 
+The scripts in this library are free to use under the MIT License conditions.
 The plots are shared under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) and require attribution.
