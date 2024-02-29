@@ -31,6 +31,11 @@ def fetch_dataset(dataset, download_if_missing=False):
         case 'imagenet-v2':
             data = datasets.fetch_imagenet_similarity(data_home, download_if_missing, version='0.2')
             triplets = preprocessing.triplets_from_multiselect(data.data, data.n_select, is_ranked=data.is_ranked)
+
+            mask = ((triplets[:, 0] != triplets[:, 1])
+                    & (triplets[:, 1] != triplets[:, 2])
+                    & (triplets[:, 0] != triplets[:, 2]))
+            triplets = triplets[mask]  # remove invalid triplets (n=1)
         case 'nature':
             data = datasets.fetch_nature_scene_similarity(data_home, download_if_missing)
             triplets = data.triplet
@@ -38,7 +43,8 @@ def fetch_dataset(dataset, download_if_missing=False):
             data = datasets.fetch_material_similarity(data_home, download_if_missing)
             triplets = data.triplet
         case 'musician':
-            data = datasets.fetch_musician_similarity(data_home, download_if_missing)
+            data = datasets.fetch_musician_similarity(data_home, download_if_missing,
+                                                      valid_triplets=True)
             triplets = data.data
         case 'vogue':
             data = datasets.fetch_vogue_cover_similarity(data_home, download_if_missing)
@@ -52,7 +58,7 @@ def fetch_dataset(dataset, download_if_missing=False):
         'train_triplets': triplets.astype(int).tolist(),
         'n_objects': int(np.amax(triplets)) + 1
     }
-            
+
 
 
 def download_all():
@@ -64,13 +70,13 @@ def download_all():
         with (DATA_HOME / f'{dataset}.json').open('w') as f:
             json.dump(data, f, indent=4)
 
-def fetch_all():
+def fetch_all(download_if_missing=False):
     return {
-        dataset: fetch_dataset(dataset)
+        dataset: fetch_dataset(dataset, download_if_missing)
         for dataset in DATASETS
     }
 
-    
+
 if __name__ == "__main__":
     print(f"Download datasets to {DATA_HOME} ...")
     download_all()
