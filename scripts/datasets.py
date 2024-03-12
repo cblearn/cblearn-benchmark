@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import json
 
-from cblearn import datasets, preprocessing
+from cblearn import datasets, preprocessing, utils
 import pandas as pd
 import tqdm
 import numpy as np
@@ -38,17 +38,17 @@ def fetch_dataset(dataset, download_if_missing=False):
             triplets = triplets[mask]  # remove invalid triplets (n=1)
         case 'nature':
             data = datasets.fetch_nature_scene_similarity(data_home, download_if_missing)
-            triplets = data.triplet
+            triplets = preprocessing.triplets_from_oddoneout(data.triplet)
         case 'material':
             data = datasets.fetch_material_similarity(data_home, download_if_missing)
-            triplets = data.triplet
+            triplets = utils.check_query_response(data.triplet, data.response, result_format='list-order')
         case 'musician':
             data = datasets.fetch_musician_similarity(data_home, download_if_missing,
                                                       valid_triplets=True)
             triplets = data.data
         case 'vogue':
             data = datasets.fetch_vogue_cover_similarity(data_home, download_if_missing)
-            triplets = data.triplet
+            triplets = preprocessing.triplets_from_oddoneout(data.triplet)
         case 'things':
             data = datasets.fetch_things_similarity(data_home, download_if_missing)
             triplets = preprocessing.triplets_from_oddoneout(data.data)
