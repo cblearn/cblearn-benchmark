@@ -1,0 +1,188 @@
+JobId=5362777 JobName=batchjob.sh
+   UserId=dkuenstle56(4190) GroupId=wichmann(4014) MCS_label=N/A
+   Priority=77047 Nice=0 Account=wichmann QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2024-03-12T20:51:52 EligibleTime=2024-03-12T20:51:52
+   AccrueTime=2024-03-12T20:51:52
+   StartTime=2024-03-13T00:14:20 EndTime=2024-03-14T00:14:20 Deadline=N/A
+   PreemptEligibleTime=2024-03-13T00:15:20 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2024-03-13T00:14:20
+   Partition=gpu-2080ti AllocNode:Sid=192.168.212.131:1679588
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=slurm-bm-44
+   BatchHost=slurm-bm-44
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=96G,node=1,billing=5,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryNode=96G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/batchjob.sh Rscript scripts/embedding.R SOE imagenet-v2
+   WorkDir=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark
+   StdErr=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362777_4294967294.err
+   StdIn=/dev/null
+   StdOut=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362777_4294967294.out
+   Power=
+   TresPerNode=gpu:1
+   MailUser=david-elias.kuenstle@uni-tuebingen.de MailType=FAIL
+   NtasksPerTRES:0
+
+[1] "Start embedding ..."
+Loading required package: loe
+Loading required package: MASS
+Error in fn(par, ...) : long vectors (argument 1) are not supported in .C
+Calls: system.time -> SOE -> optim -> <Anonymous> -> fn
+Timing stopped at: 109.3 51.35 160.6
+Execution halted
+---------------------------------
+JobId=5362723 JobName=batchjob.sh
+   UserId=dkuenstle56(4190) GroupId=wichmann(4014) MCS_label=N/A
+   Priority=81883 Nice=0 Account=wichmann QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2024-03-12T20:48:48 EligibleTime=2024-03-12T20:48:48
+   AccrueTime=2024-03-12T20:48:50
+   StartTime=2024-03-12T21:17:05 EndTime=2024-03-13T21:17:05 Deadline=N/A
+   PreemptEligibleTime=2024-03-12T21:18:05 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2024-03-12T21:17:05
+   Partition=gpu-2080ti AllocNode:Sid=192.168.212.131:1679588
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=slurm-bm-42
+   BatchHost=slurm-bm-42
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=96G,node=1,billing=5,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryNode=96G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/batchjob.sh python scripts/embedding.py FORTE-GPU imagenet-v2
+   WorkDir=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark
+   StdErr=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362723_4294967294.err
+   StdIn=/dev/null
+   StdOut=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362723_4294967294.out
+   Power=
+   TresPerNode=gpu:1
+   MailUser=david-elias.kuenstle@uni-tuebingen.de MailType=FAIL
+   NtasksPerTRES:0
+
+Traceback (most recent call last):
+  File "/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/scripts/embedding.py", line 65, in <module>
+    estimator.fit(train_triplets)
+  File "/mnt/qb/work/wichmann/dkuenstle56/conda/envs/cblearn/lib/python3.10/site-packages/cblearn/embedding/_forte.py", line 101, in fit
+    result = _torch_utils.torch_minimize_kernel('l-bfgs-b', _torch_forte_loss, init, data=(triplets.astype(int),),
+  File "/mnt/qb/work/wichmann/dkuenstle56/conda/envs/cblearn/lib/python3.10/site-packages/cblearn/embedding/_torch_utils.py", line 30, in torch_minimize_kernel
+    result = torch_minimize(method, kernel_objective, kernel_init, **kwargs)
+  File "/mnt/qb/work/wichmann/dkuenstle56/conda/envs/cblearn/lib/python3.10/site-packages/cblearn/embedding/_torch_utils.py", line 84, in torch_minimize
+    X = torch.tensor(init, requires_grad=True, device=device)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.63 GiB (GPU 0; 10.76 GiB total capacity; 114.34 MiB already allocated; 10.04 GiB free; 116.00 MiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+---------------------------------
+JobId=5362792 JobName=mat-batchjob.sh
+   UserId=dkuenstle56(4190) GroupId=wichmann(4014) MCS_label=N/A
+   Priority=80800 Nice=0 Account=wichmann QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2024-03-12T20:54:24 EligibleTime=2024-03-12T20:54:24
+   AccrueTime=2024-03-12T20:54:25
+   StartTime=2024-03-12T23:39:17 EndTime=2024-03-13T23:39:17 Deadline=N/A
+   PreemptEligibleTime=2024-03-12T23:40:17 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2024-03-12T23:39:17
+   Partition=gpu-2080ti AllocNode:Sid=192.168.212.131:1679588
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=bg-slurmb-bm1
+   BatchHost=bg-slurmb-bm1
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=48G,node=1,billing=2,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryNode=48G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/mat-batchjob.sh matlab -sd scripts/ -batch "embedding('tSTE', 'things');"
+   WorkDir=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark
+   StdErr=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362792_4294967294.err
+   StdIn=/dev/null
+   StdOut=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362792_4294967294.out
+   Power=
+   TresPerNode=gpu:1
+   MailUser=david-elias.kuenstle@uni-tuebingen.de MailType=FAIL
+   NtasksPerTRES:0
+
+Start with tSTE and things...
+ - 1 of 3708
+ - 2 of 3708
+ - 3 of 3708
+ - 4 of 3708
+ - 5 of 3708
+ - 6 of 3708
+ - 7 of 3708
+ - 8 of 3708
+ - 9 of 3708
+ - 10 of 3708
+ - 11 of 3708
+ - 12 of 3708
+ - 13 of 3708
+ - 14 of 3708
+ - 15 of 3708
+ - 16 of 3708
+ - 17 of 3708
+ - 18 of 3708
+INFO:    Using cached SIF image
+eval: 1:68: a command can only contain words and redirects; encountered (
+slurmstepd: error: *** JOB 5362792 ON bg-slurmb-bm1 CANCELLED AT 2024-03-13T23:39:41 DUE TO TIME LIMIT ***
+---------------------------------
+JobId=5362796 JobName=mat-batchjob.sh
+   UserId=dkuenstle56(4190) GroupId=wichmann(4014) MCS_label=N/A
+   Priority=77028 Nice=0 Account=wichmann QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2024-03-12T20:54:24 EligibleTime=2024-03-12T20:54:24
+   AccrueTime=2024-03-12T20:54:25
+   StartTime=2024-03-13T00:07:06 EndTime=2024-03-14T00:07:06 Deadline=N/A
+   PreemptEligibleTime=2024-03-13T00:08:06 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2024-03-13T00:07:06
+   Partition=gpu-2080ti AllocNode:Sid=192.168.212.131:1679588
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=bg-slurmb-bm-2
+   BatchHost=bg-slurmb-bm-2
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=48G,node=1,billing=2,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryNode=48G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/slurm/mat-batchjob.sh matlab -sd scripts/ -batch "embedding('tSTE', 'imagenet-v2');"
+   WorkDir=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark
+   StdErr=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362796_4294967294.err
+   StdIn=/dev/null
+   StdOut=/mnt/qb/work/wichmann/dkuenstle56/cblearn-benchmark/logs/cblearn-benchmark_5362796_4294967294.out
+   Power=
+   TresPerNode=gpu:1
+   MailUser=david-elias.kuenstle@uni-tuebingen.de MailType=FAIL
+   NtasksPerTRES:0
+
+Start with tSTE and imagenet-v2...
+ - 1 of 100000
+ - 2 of 100000
+ - 3 of 100000
+ - 4 of 100000
+ - 5 of 100000
+ - 6 of 100000
+ - 7 of 100000
+ - 8 of 100000
+ - 9 of 100000
+ - 10 of 100000
+ - 11 of 100000
+ - 12 of 100000
+ - 13 of 100000
+ - 14 of 100000
+ - 15 of 100000
+ - 16 of 100000
+ - 17 of 100000
+ - 18 of 100000
+INFO:    Using cached SIF image
+eval: 1:68: a command can only contain words and redirects; encountered (
+slurmstepd: error: *** JOB 5362796 ON bg-slurmb-bm-2 CANCELLED AT 2024-03-14T00:07:31 DUE TO TIME LIMIT ***
