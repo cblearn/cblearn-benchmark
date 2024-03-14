@@ -143,10 +143,9 @@ these dependencies to your local R instance with `install.packages(...)`.
 
 ## Missing data
 
-We run each algorithm and dataset on a separate cluster entity with 96GB RAM and maximum 1 day runtime. If this is not enough, the run fails and no resultfile is stored. For example, our *FORTE-GPU* algorithm requires too much memory and thus fails on the large *imagenet-v2* dataset.
+We run each algorithm and dataset on a separate cluster entity with 96GB RAM and maximum 24h runtime. Runs that exceeded these limitations failed intentionally. For example, our *FORTE-GPU* algorithm requires too much memory and thus fails on the large *imagenet-v2* dataset.
 Similarly, the *tSTE* algorithm of vanderMaaten  timed out on the *things* and *imagenet-v2* datasets.
 The *R* implementation of *SOE* crashed for *imagenet-v2* because "long vectors" are not supported by some internal function.
-The *CKL-GPU* run on *musician* resulted in NaN results (probably a bug).
 
 # License
 
